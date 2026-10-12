@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Presentation library</title>
+  <meta name="description" content="Innoraft delivery decks and integration briefings.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --navy: #003352;
+  --navy2: #002949;
+  --navy3: #0B4A72;
+  --orange: #F67A0E;
+  --deep: #F1621B;
+  --amber: #FEC363;
+  --body: #33404D;
+  --mute: #5B6B78;
+  --ice: #E6EEF4;
+  --display: "Bebas Neue", Impact, sans-serif;
+  --sans: "Poppins", system-ui, sans-serif;
+  --mono: "DM Mono", ui-monospace, monospace;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+}
+* { box-sizing: border-box }
+html, body { margin: 0; min-height: 100% }
+body {
+  font-family: var(--sans);
+  color: #fff;
+  background: var(--navy);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit }
+.vh {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  padding: 48px 64px 56px;
+  overflow-x: hidden;
+}
+.bg {
+  position: absolute;
+  inset: auto -80px -120px auto;
+  width: min(720px, 52vw);
+  pointer-events: none;
+  opacity: .9;
+}
+.bg svg { display: block; width: 100%; height: auto }
+.road-b {
+  fill: none;
+  stroke: rgba(255,255,255,.07);
+  stroke-width: 28;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.road {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 28;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.2s var(--ease) .3s forwards;
+}
+.stp { opacity: 0; animation: pop .55s cubic-bezier(.3,1.6,.5,1) forwards }
+.stp:nth-child(1) { animation-delay: .55s }
+.stp:nth-child(2) { animation-delay: .95s }
+.stp:nth-child(3) { animation-delay: 1.35s }
+.stp circle { fill: #fff }
+.stp.end circle { fill: var(--amber) }
+.stp .n {
+  font: 400 28px var(--display);
+  fill: var(--navy);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+  gap: 48px;
+  align-items: center;
+}
+
+.logo { display: block; height: 40px; width: auto }
+.eb {
+  margin: 72px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: 500 15px/1 var(--mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+.eb::before {
+  content: "";
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  background: var(--orange);
+}
+h1 {
+  margin: 0;
+  font: 400 clamp(72px, 9vw, 168px)/.86 var(--display);
+  letter-spacing: .004em;
+}
+h1 span { color: var(--orange) }
+.lede {
+  margin: 28px 0 0;
+  max-width: 520px;
+  font: 400 20px/1.5 var(--sans);
+  color: rgba(255,255,255,.84);
+}
+.for {
+  margin: 24px 0 0;
+  display: none;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.1);
+  font: 400 16px var(--sans);
+  color: rgba(255,255,255,.8);
+  width: max-content;
+}
+.for.on { display: inline-flex }
+.for b { font-weight: 600; color: #fff }
+
+.decks {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+.deck {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: start;
+  min-width: 0;
+  padding: 28px 30px;
+  border-radius: 20px;
+  background: var(--navy3);
+  text-decoration: none;
+  outline: 1px solid transparent;
+  transition: background .25s var(--ease), outline-color .25s var(--ease);
+}
+.deck:hover,
+.deck:focus-visible {
+  background: #12547f;
+  outline-color: var(--orange);
+}
+.deck:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px }
+.num {
+  font: 400 44px/1 var(--display);
+  color: var(--amber);
+  min-width: 1.4em;
+}
+.kicker {
+  margin: 0 0 8px;
+  font: 500 12px/1 var(--mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+}
+.title {
+  margin: 0;
+  font: 600 26px/1.2 var(--sans);
+}
+.blurb {
+  margin: 10px 0 0;
+  font: 400 16px/1.45 var(--sans);
+  color: rgba(255,255,255,.78);
+}
+.meta {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.meta li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.1);
+  font: 500 12px/1 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.78);
+}
+.go {
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--orange);
+  color: var(--navy2);
+  transition: background .25s;
+}
+.deck:hover .go { background: var(--amber) }
+.status {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.status.live { background: #17773F; color: #fff }
+.status.draft { background: rgba(255,255,255,.16); color: var(--amber) }
+
+.foot {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 56px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font: 500 13px/1 var(--mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.foot .sp { flex: 1 }
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.28);
+}
+
+@media (max-width: 1100px) {
+  .page { padding: 32px 24px 40px }
+  .shell { grid-template-columns: 1fr; gap: 8px; align-items: start }
+  .eb { margin-top: 40px }
+  .decks { margin-top: 36px }
+  .bg { width: 420px; opacity: .35 }
+}
+@media (max-width: 560px) {
+  h1 { font-size: 72px }
+  .deck { grid-template-columns: auto 1fr; padding: 22px }
+  .go { display: none }
+}
+@media (prefers-reduced-motion: reduce) {
+  .road, .stp { animation: none }
+  .road { stroke-dashoffset: 0 }
+  .stp { opacity: 1 }
+}
+@keyframes draw { to { stroke-dashoffset: 0 } }
+@keyframes pop { from { opacity: 0; transform: scale(.4) } to { opacity: 1; transform: none } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="bg" aria-hidden="true">
+      <svg viewBox="0 0 640 640">
+        <path class="road-b" d="M40 120 H460 A100 100 0 0 1 460 320 H160 A100 100 0 0 0 160 520 H520"/>
+        <path class="road" pathLength="1" d="M40 120 H460 A100 100 0 0 1 460 320 H160 A100 100 0 0 0 160 520 H520"/>
+        <g class="stp" transform="translate(90 120)"><circle r="26"/><text class="n">01</text></g>
+        <g class="stp" transform="translate(360 320)"><circle r="26"/><text class="n">02</text></g>
+        <g class="stp end" transform="translate(520 520)"><circle r="26"/><text class="n">03</text></g>
+      </svg>
+    </div>
+
+    <div class="shell">
+      <header>
+        <svg class="logo" width="251" height="57" viewBox="0 0 251 57" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Innoraft">
+          <g clip-path="url(#logo-clip)">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M45.1441 34.8251C50.7478 35.49 54.072 36.4081 54.6419 31.6275C56.4781 16.1779 45.3658 0.0634485 29.7578 0.000130306C7.88142 -0.0948469 29.7578 51.7627 18.2339 49.135C3.06923 43.8479 2.40439 18.2358 14.6248 12.2522C-4.59227 16.7478 -3.54752 56.1633 23.0144 56.5432C36.8495 56.3216 20.64 10.2577 29.9161 6.90181C36.9128 5.25554 43.4662 13.7085 45.1758 20.7368C46.5055 26.1822 46.0623 25.3274 41.9782 25.9289C23.6793 28.5566 35.1082 53.6306 50.9378 54.612C40.9335 50.3697 35.0766 33.6221 45.1441 34.8251Z" fill="#FFFFFF"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.0955 3.67277C7.59657 3.95771 9.36947 6.23716 9.08454 8.73823C8.79961 11.2393 6.52015 13.0439 4.01909 12.7273C1.51802 12.4423 -0.254886 10.1629 0.0300458 7.66182C0.314978 5.16075 2.59443 3.35618 5.0955 3.67277Z" fill="#FF7900"/>
+            <path d="M77.0017 17.856H79.0912V38.6243H77.0017V17.856Z" fill="#FF7900"/>
+            <path d="M86.7527 38.6243V17.856H87.2276L101.031 33.7488V17.856H103.089V38.6243H102.614L88.9055 22.9214V38.6243H86.7527Z" fill="#FF7900"/>
+            <path d="M111.067 38.6243V17.856H111.51L125.345 33.7488V17.856H127.403V38.6243H126.928L113.22 22.9214V38.6243H111.067Z" fill="#FF7900"/>
+            <path d="M153.173 20.4836C151.052 18.3941 148.424 17.3494 145.259 17.3494C143.327 17.3494 141.523 17.8243 139.845 18.8057C138.167 19.7871 136.869 21.1168 135.887 22.8264C134.938 24.536 134.431 26.3722 134.431 28.3667C134.431 31.3743 135.508 33.9071 137.597 36.0282C139.718 38.1494 142.314 39.1941 145.385 39.1941C148.424 39.1941 151.021 38.1494 153.11 36.0282C155.231 33.9071 156.276 31.3427 156.276 28.2717C156.371 25.1692 155.294 22.5731 153.173 20.4836ZM153.047 32.7673C152.287 34.1287 151.21 35.2051 149.849 35.9649C148.488 36.7564 147 37.1363 145.385 37.1363C142.979 37.1363 140.921 36.2815 139.212 34.6036C137.502 32.894 136.647 30.8045 136.647 28.3351C136.647 26.6571 137.027 25.1692 137.819 23.8078C138.61 22.4465 139.655 21.3701 141.048 20.5786C142.441 19.7871 143.866 19.3755 145.417 19.3755C146.968 19.3755 148.456 19.7871 149.849 20.5786C151.242 21.3701 152.319 22.4465 153.078 23.7762C153.838 25.1058 154.218 26.5938 154.218 28.2401C154.218 29.8864 153.838 31.406 153.047 32.7673Z" fill="#FF7900"/>
+            <path d="M175.715 31.5009C177.044 30.9943 178.121 30.1079 178.912 28.9365C179.704 27.7335 180.115 26.3405 180.115 24.7258C180.115 23.6494 179.925 22.6997 179.577 21.7816C179.229 20.8951 178.722 20.1036 178.089 19.4704C177.456 18.8373 176.696 18.3307 175.778 17.9508C174.892 17.6026 173.879 17.4126 172.802 17.4126H163.178V38.5925H167.23V31.8491H171.251C172.074 33.0205 172.865 34.1286 173.689 35.2683C174.512 36.3764 175.335 37.4845 176.19 38.5925H181.033C179.292 36.2498 177.519 33.8753 175.715 31.5009ZM173.973 28.0817C173.594 28.24 173.182 28.3033 172.834 28.3033H167.23V21.0534H172.802C173.499 21.0534 174.068 21.18 174.512 21.465C174.923 21.7499 175.271 22.0665 175.493 22.4464C175.715 22.8263 175.873 23.2379 175.968 23.6494C176.063 24.061 176.095 24.4409 176.095 24.7575C176.095 25.359 176 25.8656 175.778 26.3088C175.588 26.752 175.335 27.1319 175.018 27.4169C174.733 27.7018 174.353 27.9234 173.973 28.0817Z" fill="#FFFFFF"/>
+            <path d="M196.42 17.4758H196.008L185.181 38.6241H189.581L191.196 35.2999H201.168L202.815 38.6241H207.215L196.42 17.4758ZM193.19 31.7857L196.23 25.3906L199.237 31.7857H193.19Z" fill="#FFFFFF"/>
+            <path d="M217.378 21.0535V26.2772H227.604V30.013H217.378V38.6243H213.326V17.4443H228.902V21.0535H217.378Z" fill="#FFFFFF"/>
+            <path d="M251 21.0218H244.953V38.6243H240.901V21.0218H234.822V17.4443H251V21.0218Z" fill="#FFFFFF"/>
+          </g>
+          <defs>
+            <clipPath id="logo-clip"><rect width="251" height="56.5432" fill="white"/></clipPath>
+          </defs>
+        </svg>
+        <p class="eb">Presentation library</p>
+        <h1>Project <span>decks</span></h1>
+        <p class="lede">Delivery briefings and integration walkthroughs, in one place. Open a deck to present.</p>
+        <p class="for" id="for">Prepared for <b></b></p>
+      </header>
+
+      <nav class="decks" id="decks" aria-label="Available presentations"></nav>
+    </div>
+
+    <footer class="foot">
+      <span>Innoraft</span>
+      <span class="dot"></span>
+      <span>Presentation library</span>
+      <span class="sp"></span>
+      <span id="count"></span>
+    </footer>
+  </div>
+
+  <noscript>
+    <p class="vh">JavaScript is off. Open <a href="headless-project-roadmap.html">Headless Project roadmap</a>.</p>
+  </noscript>
+
+  <script>
+(function () {
+  /*
+    Add a new presentation by appending an object to DECKS:
+
+    {
+      href: 'your-file.html',
+      kicker: 'Category label',
+      title: 'Deck title',
+      blurb: 'One-sentence description.',
+      meta: ['5 phases', '14 slides'],
+      status: 'Live'   // Live | Draft — omit to hide the pill
+    }
+  */
+  var DECKS = [
+    {
+      href: 'headless-project-roadmap.html',
+      kicker: 'Delivery roadmap',
+      title: 'Headless Project',
+      blurb: 'Five connected phases, with infrastructure and QA running as parallel lanes.',
+      meta: ['5 phases', '14 milestones'],
+      status: 'Live'
+    }
+  ];
+
+  var q = location.search;
+  var who = new URLSearchParams(q).get('for');
+  if (who) {
+    var fe = document.getElementById('for');
+    fe.classList.add('on');
+    fe.querySelector('b').textContent = who.trim().slice(0, 60);
+  }
+
+  function href(path) {
+    if (!q) return path;
+    return path + (path.indexOf('?') === -1 ? q : '&' + q.slice(1));
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+
+  var root = document.getElementById('decks');
+  root.innerHTML = DECKS.map(function (d, i) {
+    var n = String(i + 1).padStart(2, '0');
+    var pill = d.status
+      ? '<span class="status ' + (d.status.toLowerCase() === 'live' ? 'live' : 'draft') + '">' + esc(d.status) + '</span>'
+      : '';
+    var meta = (d.meta || []).map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('');
+    return (
+      '<a class="deck" href="' + esc(href(d.href)) + '">' +
+        '<span class="num">' + n + '</span>' +
+        '<span>' +
+          '<p class="kicker">' + esc(d.kicker) + pill + '</p>' +
+          '<h2 class="title">' + esc(d.title) + '</h2>' +
+          '<p class="blurb">' + esc(d.blurb) + '</p>' +
+          (meta ? '<ul class="meta">' + meta + '</ul>' : '') +
+        '</span>' +
+        '<span class="go" aria-hidden="true">' +
+          '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</span>' +
+      '</a>'
+    );
+  }).join('');
+
+  document.getElementById('count').textContent =
+    DECKS.length === 1 ? '01 deck' : String(DECKS.length).padStart(2, '0') + ' decks';
+})();
+  </script>
+</body>
+</html>
